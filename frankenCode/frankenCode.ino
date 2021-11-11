@@ -9,6 +9,7 @@ Adafruit_INA260 ina260 = Adafruit_INA260(); //0x40 i2c address
 
 //vars
 int16_t results; //ADC
+int16_t solar; //ADC
 
 void setup() {
   // setup ADC
@@ -24,13 +25,13 @@ void setup() {
   //check for sensors
   if (!ads1115.begin()) {
     Serial.println("Failed to initialize ADS.");
-    while (1);
+    //for (1);
   }
   Serial.println("Found ads1115 chip");
   
   if (!ina260.begin()) {
     Serial.println("Couldn't find INA260 chip");
-    while (1);
+    //while (1);
   }
   Serial.println("Found INA260 chip");
   
@@ -43,8 +44,8 @@ void loop() {
   float multiplier = 0.015625; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
 
   results = ads1115.readADC_Differential_0_1();
-
-  Serial.print("Differential: "); Serial.print(results); Serial.print("("); Serial.print(results * multiplier); Serial.println("mV)");
+  solar = results * multiplier * 5;
+  Serial.print("Differential: "); Serial.print(solar); Serial.print("("); Serial.print(results * multiplier); Serial.println("mV)");
 
   delay(1000);
 
@@ -58,7 +59,7 @@ void loop() {
   Serial.println(" mV");
 
   Serial.print("Power: ");
-  Serial.print(ina260.readPower());
+  //Serial.print(ina260.readPower());
   Serial.println(" mW");
 
   Serial.println();
