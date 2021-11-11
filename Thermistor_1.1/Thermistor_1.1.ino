@@ -1,4 +1,4 @@
-int ThermistorPin = A5;
+int thermistorPin = A4;
 int Vo;
 float R1 = 99800.0;
 float logR2, R2, T;
@@ -8,7 +8,7 @@ int samples[NUMSAMPLES];
 
 void setup() {
 Serial.begin(9600);
-pinMode(A0, INPUT); 
+pinMode(thermistorPin, INPUT); 
 analogReference(EXTERNAL); // use AREF for reference voltage
 }
 
@@ -19,7 +19,7 @@ void loop() {
  
   // take N samples in a row, with a slight delay
   for (i=0; i< NUMSAMPLES; i++) {
-   samples[i] = analogRead(ThermistorPin);
+   samples[i] = analogRead(thermistorPin);
    delay(15);
   }
  
