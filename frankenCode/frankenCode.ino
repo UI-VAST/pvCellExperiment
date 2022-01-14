@@ -37,7 +37,7 @@ Connect CS to pin 10 */
 void setup() {
   //Setup thermistor
   pinMode(thermistorPin, INPUT); 
-  analogReference(EXTERNAL); // use AREF for reference voltage
+  
 
   // setup ADC
   Serial.begin(9600);
@@ -80,34 +80,31 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   //ADC RUN CODE
-  Serial.println("HERE");
+  //Serial.println("HERE");
   float multiplier = 0.015625; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
 
   results = ads1115.readADC_Differential_0_1();
   solar = results * multiplier * 5;
-  Serial.print("Differential: "); Serial.print(solar); Serial.print("("); Serial.print(results * multiplier); Serial.println("mV)");
+  //Serial.print("Differential: "); Serial.print(solar); Serial.print("("); Serial.print(results * multiplier); Serial.println("mV)");
 
   delay(1000);
 
   //IV Chip run code
-  Serial.print("Current: ");
-  Serial.print(ina260.readCurrent());
-  Serial.println(" mA");
+  //Serial.print("Current: ");
+  //Serial.print(ina260.readCurrent());
+  //Serial.println(" mA");
 
-  Serial.print("Bus Voltage: ");
-  Serial.print(ina260.readBusVoltage());
-  Serial.println(" mV");
+  //Serial.print("Bus Voltage: ");
+  //Serial.print(ina260.readBusVoltage());
+  //Serial.println(" mV");
 
-  Serial.print("Power: ");
-  //Serial.print(ina260.readPower());
-  Serial.println(" mW");
-
-  Serial.println();
+  //Serial.println();
   delay(1000);
   T = pollThermistor();
 
   //write to sd card
-  contents = "TEST";
+  contents = String(millis()/1000) + "," + String(ina260.readBusVoltage()) + "," + String(ina260.readCurrent()) + "," + String(solar) + "," + String(T) ;
+  Serial.println(contents);
   writeToFile();
   
 }
@@ -151,7 +148,7 @@ void writeToFile()
   // so you have to close this one before opening another.
   
   fName = String(abs(randomNumber)) + "_" + String(millis()/1000) + ".txt";
-  //fName = "Testaroo.txt";
+  
   Serial.print(fName);
   myFile = SD.open(fName, FILE_WRITE);
  
