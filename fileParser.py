@@ -27,3 +27,5 @@ contents.to_csv('pvData.csv', index=False)
     
 "Time, Voltage(mV), Current(mA), solar, temp(C)"
 
+def getRadiosondeData
+

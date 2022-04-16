@@ -23,6 +23,10 @@ int samples[NUMSAMPLES];
 //sd card
 String contents;
 #include <SD.h>
+
+//openlog
+#include <SoftwareSerial.h>
+SoftwareSerial OpenLog(5,6);
  
 File myFile;
 String fName;
@@ -41,6 +45,7 @@ void setup() {
 
   // setup ADC
   Serial.begin(9600);
+  OpenLog.begin(9600);
   // Wait until serial port is opened
   while (!Serial) { delay(10); }
   Serial.println("Hello!");
@@ -103,8 +108,10 @@ void loop() {
   T = pollThermistor();
 
   //write to sd card
+  // time, voltage, current, solar irrad, temp
   contents = String(millis()/1000) + "," + String(ina260.readBusVoltage()) + "," + String(ina260.readCurrent()) + "," + String(solar) + "," + String(T) ;
-  Serial.println(contents);
+  //Serial.println(contents);
+  OpenLog.println(contents);
   writeToFile();
   
 }
@@ -134,10 +141,6 @@ float pollThermistor(){
   T = T - 273.15;
   //T = (T * 9.0)/ 5.0 + 32.0; 
 
-  Serial.print("Temperature: "); 
-  Serial.print(T);
-  Serial.println(" C"); 
-
   delay(1000);
   return T;
 }
@@ -154,7 +157,7 @@ void writeToFile()
  
   // if the file opened okay, write to it:
   if (myFile) {
-    Serial.print("Writing to file: ");
+    Serial.println("Writing to file: ");
     myFile.println(contents);
   // close the file:
     myFile.close();
